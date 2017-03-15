@@ -2,3 +2,5 @@ node_modules/
 app/dist/
 .idea/
 rev
+rev*
+rev/assets
