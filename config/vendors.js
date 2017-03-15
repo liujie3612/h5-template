@@ -11,8 +11,6 @@ module.exports = {
         'node_modules/swiper/dist/js/swiper.jquery.umd.js'
     ],
     fonts: [
-        // if you need font-awesome
-        // 'node_modules/font-awesome/fonts/*'
         'app/src/fonts/*'
     ]
 };

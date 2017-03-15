@@ -11,17 +11,16 @@ var minifycss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var notify = require('gulp-notify');
-var rename = require('gulp-rename');
 var runSequence = require('run-sequence');
 var sass = require('gulp-sass');
 var streamSeries = require('stream-series');
 var plumber = require('gulp-plumber');
 
-
 //new add modules
 var fontmin = require('gulp-fontmin');
 var rev = require('gulp-rev');
 var revReplace = require("gulp-rev-replace");
+var htmlminify = require("gulp-html-minify");
 
 //custom module
 var vendors = require('./config/vendors');
@@ -181,6 +180,12 @@ gulp.task("revreplace", function() {
         .pipe(gulp.dest("app/dist"));
 });
 
+gulp.task('build-html', function() {
+    return gulp.src('app/dist/*.html')
+        .pipe(htmlminify())
+        .pipe(gulp.dest("app/dist/"))
+});
+
 // delete app/dist/styles/bundle.css and app/dist/javascripts/bundle.js
 gulp.task('del-bundle', ['revreplace'], function(cb) {
     return del([
@@ -189,7 +194,7 @@ gulp.task('del-bundle', ['revreplace'], function(cb) {
 });
 
 gulp.task('build', function(cb) {
-    runSequence('clean-files', 'copy', ['publish-images', 'publish-fonts'], 'rev', 'revreplace');
+    runSequence('clean-files', 'copy', ['publish-images', 'publish-fonts'], 'rev', 'revreplace', 'build-html');
 });
 
 
