@@ -38,8 +38,8 @@ gulp.task('clean-files', function(cb) {
     ], cb);
 });
 
-gulp.task('copy', ['clean-files'], function() {
-    return gulp.src(['app/src/audios/*', 'app/src/fonts/**/*'], {
+gulp.task('copy', function() {
+    return gulp.src(['app/src/audios/*', 'app/src/fonts/**/*', 'app/src/styles/bundle.css', 'app/src/scripts/bundle.js', 'app/src/index.html'], {
             base: 'app/src'
         })
         .pipe(gulp.dest('app/dist'))
@@ -80,9 +80,8 @@ gulp.task('publish-fonts', function(done) {
         });
 })
 
-// compile sass, concat styles in the right order,
-// and save as app/dist/styles/bundle.css
-gulp.task('publish-css', function() {
+
+gulp.task('contat-css', function() {
     var cssVendors = vendors.styles;
     return streamSeries(
             gulp.src(cssVendors),
@@ -97,12 +96,12 @@ gulp.task('publish-css', function() {
         )
         .pipe(concat('bundle.css'))
         .pipe(minifycss())
-        .pipe(gulp.dest('app/dist/styles'))
+        .pipe(gulp.dest('app/src/styles'))
 });
 
 // bundle CommonJS modules under app/src/javascripts, concat javascripts in the right order,
 // and save as app/dist/javascripts/bundle.js
-gulp.task('publish-js', function() {
+gulp.task('contat-js', function() {
     var jsVendors = vendors.scripts;
     return streamSeries(
             gulp.src(jsVendors),
@@ -117,57 +116,10 @@ gulp.task('publish-js', function() {
         )
         .pipe(concat('bundle.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('app/dist/scripts'))
-});
-
-// inject app/dist/styles/bundle.css and app/dist/javascripts/bundle.js into app/src/index.html
-// and save as app/dist/index.html
-gulp.task('inject', function() {
-    var target = gulp.src('app/src/index.html')
-    var assets = gulp.src([
-        'app/dist/styles/bundle.css/',
-        'app/dist/scripts/bundle.js/'
-    ], {
-        read: false
-    })
-    return target
-        .pipe(inject(assets, {
-            ignorePath: 'app/dist',
-            addRootSlash: true,
-            removeTags: true
-        }))
-        .pipe(gulp.dest('app/dist'));
-});
-
-/*version可随意配置*/
-gulp.task("rev", () => {
-    gulp.src(['app/dist/styles/*.css', 'app/dist/scripts/*.js', 'app/dist/images/*', 'app/dist/fonts/*', 'app/dist/audios/*'], { base: 'app/dist' })
-        .pipe(rev())
-        .pipe(gulp.dest('app/dist'))
-        .pipe(rev.manifest())
-        .pipe(gulp.dest("rev/assets"))
+        .pipe(gulp.dest('app/src/scripts'))
 });
 
 
-// watch files and run corresponding task(s) once files are added, removed or edited.
-gulp.task('watch', function() {
-    browserSync.init({
-        server: {
-            baseDir: 'app/dist'
-        }
-    });
-    gulp.watch('app/src/index.html', ['inject']);
-    gulp.watch('app/src/scss/**/*.scss', ['publish-css']);
-    gulp.watch('app/src/scripts/**/*', ['publish-js']);
-    gulp.watch('app/src/fonts/**/*', ['publish-fonts']);
-    gulp.watch('app/src/images/**/*', ['publish-images']);
-    gulp.watch('app/src/audios/**/*', ['publish-audios']);
-
-    gulp.watch('app/dist/index.html').on('change', browserSync.reload);
-    gulp.watch('app/dist/scripts/*').on('change', browserSync.reload);
-    gulp.watch('app/dist/fonts/*').on('change', browserSync.reload);
-    gulp.watch('app/dist/images/*').on('change', browserSync.reload);
-});
 
 // delete cache
 // gulp.task('clean-cache', function (cb) {
@@ -175,75 +127,71 @@ gulp.task('watch', function() {
 // });
 
 // development workflow task
-gulp.task('dev', function(cb) {
+/*gulp.task('dev', function(cb) {
     runSequence(['clean-files'], ['copy'], ['publish-images', 'publish-css', 'publish-js', 'publish-fonts'], ['rev'], 'inject', 'watch', cb);
+});*/
+
+gulp.task('dev', function(cb) {
+    runSequence(['contat-css', 'contat-js'], 'watch', cb);
 });
 
 // default task
 gulp.task('default', ['dev']);
 
+// watch files and run corresponding task(s) once files are added, removed or edited.
+gulp.task('watch', function() {
+    browserSync.init({
+        server: {
+            baseDir: 'app/src'
+        }
+    });
+
+    gulp.watch('app/src/scss/**/*.scss', ['contat-css']);
+    gulp.watch('app/src/scripts/**/*', ['contat-js']);
+
+    gulp.watch('app/src/index.html').on('change', browserSync.reload);
+    // gulp.watch('app/src/scripts/*').on('change', browserSync.reload);
+    gulp.watch('app/src/styles/*').on('change', browserSync.reload);
+    gulp.watch('app/src/fonts/*').on('change', browserSync.reload);
+    gulp.watch('app/src/images/*').on('change', browserSync.reload);
+});
+
 /* ============================================================================================================
 ================================================= For Production ==============================================
 =============================================================================================================*/
-// minify app/dist/styles/bundle.css and save as app/dist/styles/bundle.min.css
-gulp.task('minify-css', function() {
-    return gulp.src('app/dist/styles/bundle.css')
-        .pipe(minifycss())
-        .pipe(rename({
-            suffix: '.min'
-        }))
-        .pipe(gulp.dest('app/dist/styles'));
+
+gulp.task("rev", () => {
+    /*version 可随意配置*/
+    return gulp.src(['app/dist/styles/*.css', 'app/dist/scripts/*.js', 'app/dist/images/*', 'app/dist/fonts/*', 'app/dist/audios/*'], { base: 'app/dist' })
+        .pipe(rev())
+        .pipe(gulp.dest('app/dist'))
+        .pipe(rev.manifest())
+        .pipe(gulp.dest("rev/assets"))
 });
 
-// uglify app/dist/javascripts/bundle.js and save as app/dist/javascripts/bundle.min.js
-gulp.task('uglify-js', function() {
-    return gulp.src('app/dist/scripts/bundle.js')
-        .pipe(uglify())
-        .pipe(rename({
-            suffix: '.min'
-        }))
-        .pipe(gulp.dest('app/dist/scripts'));
-});
-
-// inject app/dist/styles/bundle.min.css and app/dist/javascripts/bundle.min.js into app/src/index.html
-// and save as app/dist/index.html
-gulp.task('inject-min', function() {
-    var target = gulp.src('app/src/index.html');
-    var assets = gulp.src([
-        'app/dist/styles/bundle.min.css',
-        'app/dist/scripts/bundle.min.js'
-    ], {
-        read: false
-    });
-    return target
-        .pipe(inject(assets, {
-            ignorePath: 'app/dist/',
-            addRootSlash: false,
-            removeTags: true
-        }))
-        .pipe(gulp.dest('app/dist'));
-});
-
-gulp.task("revreplace", ['publish-images', 'publish-fonts', 'publish-css', 'publish-js'], function() {
+gulp.task("revreplace", function() {
     var manifest = gulp.src("rev/**/*.json");
-    return gulp.src(["app/dist/scripts/**/*.js", "app/dist/styles/**/*.css", "app/dist/*.html"], { base: "app/dist" })
-        .pipe(revReplace({ manifest: manifest, prefix: 'https://img.wdstatic.cn/test' }))
+    return gulp.src(["app/dist/scripts/**/*.js", "app/dist/styles/**/*.css", "app/dist/*.html"], {
+            base: "app/dist"
+        })
+        .pipe(revReplace({
+            manifest: manifest,
+            prefix: 'https://img.wdstatic.cn/test'
+        }))
         .pipe(gulp.dest("app/dist"));
 });
 
 // delete app/dist/styles/bundle.css and app/dist/javascripts/bundle.js
 gulp.task('del-bundle', ['revreplace'], function(cb) {
     return del([
-        'app/dist/styles/bundle.css',
-        'app/dist/scripts/bundle.js',
-        'app/dist/audios/background.mp3'
+        'app/dist/audios/background.mp3',
     ], cb);
 });
 
-// delete unminified files
 gulp.task('build', function(cb) {
-    runSequence('del-bundle', cb);
+    runSequence('clean-files', 'copy', ['publish-images', 'publish-fonts'], 'rev', 'revreplace');
 });
+
 
 /* ===============================================
  ================== Functions ====================

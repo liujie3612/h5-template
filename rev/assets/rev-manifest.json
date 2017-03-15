@@ -1,10 +1,10 @@
 {
   "audios/background.mp3": "audios/background-5da8cff342.mp3",
   "fonts/fzltxh.css": "fonts/fzltxh-eaf860f4f3.css",
-  "fonts/fzltxh.eot": "fonts/fzltxh-1572aea403.eot",
-  "fonts/fzltxh.svg": "fonts/fzltxh-2df3437c11.svg",
-  "fonts/fzltxh.ttf": "fonts/fzltxh-0d3787cf61.ttf",
-  "fonts/fzltxh.woff": "fonts/fzltxh-84aa4da9fb.woff",
+  "fonts/fzltxh.eot": "fonts/fzltxh-0e082a9222.eot",
+  "fonts/fzltxh.svg": "fonts/fzltxh-bb74777331.svg",
+  "fonts/fzltxh.ttf": "fonts/fzltxh-19f9845a14.ttf",
+  "fonts/fzltxh.woff": "fonts/fzltxh-d32f2fed6c.woff",
   "fonts/wd-icon.eot": "fonts/wd-icon-1c5ce0cd48.eot",
   "fonts/wd-icon.svg": "fonts/wd-icon-ca24e02b9c.svg",
   "fonts/wd-icon.ttf": "fonts/wd-icon-aaf0570690.ttf",
@@ -15,6 +15,6 @@
   "images/github-3.png": "images/github-3-604376f5a5.png",
   "images/header-music.svg": "images/header-music-73d7e7ba30.svg",
   "images/loading.svg": "images/loading-3551186b40.svg",
-  "scripts/bundle.js": "scripts/bundle-6fc733fa09.js",
-  "styles/bundle.css": "styles/bundle-93f4c1a54b.css"
+  "scripts/bundle.js": "scripts/bundle-fe42a48db8.js",
+  "styles/bundle.css": "styles/bundle-892c4380f2.css"
 }
