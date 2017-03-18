@@ -1,12 +1,12 @@
 {
-  "name": "wechat-h5-boilerplate",
-  "version": "0.3.5",
+  "name": "wd-h5",
+  "version": "0.1",
   "description": "A fullpage scrolling website boilerplate for mobile devices.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/panteng/wechat-h5-boilerplate.git"
+    "url": "git@github.com:liujie3612/h5-template.git"
   },
-  "author": "Chris Pan",
+  "author": "liujie",
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.10.1",
@@ -16,17 +16,18 @@
     "gulp-browserify": "^0.5.1",
     "gulp-concat": "^2.6.1",
     "gulp-fontmin": "^0.7.4",
+    "gulp-html-minify": "0.0.14",
     "gulp-imagemin": "^3.1.1",
     "gulp-inject": "^4.2.0",
     "gulp-minify-css": "^1.2.2",
     "gulp-notify": "^3.0.0",
     "gulp-plumber": "^1.0.1",
-    "gulp-rename": "^1.2.2",
     "gulp-rev": "^7.1.2",
     "gulp-rev-replace": "^0.4.3",
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^2.0.1",
-    "gulp-usemin": "^0.3.28",
+    "install": "^0.8.7",
+    "npm": "^4.4.1",
     "partialify": "^3.1.5",
     "run-sequence": "^1.1.5",
     "stream-series": "^0.1.1"

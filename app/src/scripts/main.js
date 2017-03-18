@@ -65,7 +65,7 @@
         // hide loading animation since everything is ready
         $('.loading-overlay').slideUp();
 
-        custom.console('jiejiewudi')
+        custom.console('jiejiewudi123')
 
     });
 })();
