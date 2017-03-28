@@ -98,8 +98,7 @@ gulp.task('contat-css', function() {
         .pipe(gulp.dest('app/src/styles'))
 });
 
-// bundle CommonJS modules under app/src/javascripts, concat javascripts in the right order,
-// and save as app/dist/javascripts/bundle.js
+
 gulp.task('contat-js', function() {
     var jsVendors = vendors.scripts;
     return streamSeries(
@@ -125,11 +124,6 @@ gulp.task('contat-js', function() {
 //     return cache.clearAll(cb)
 // });
 
-// development workflow task
-/*gulp.task('dev', function(cb) {
-    runSequence(['clean-files'], ['copy'], ['publish-images', 'publish-css', 'publish-js', 'publish-fonts'], ['rev'], 'inject', 'watch', cb);
-});*/
-
 gulp.task('dev', function(cb) {
     runSequence(['contat-css', 'contat-js'], 'watch', cb);
 });
@@ -143,13 +137,12 @@ gulp.task('watch', function() {
         server: {
             baseDir: 'app/src'
         }
-    });
-
+    }); 
     gulp.watch('app/src/scss/**/*.scss', ['contat-css']);
     gulp.watch('app/src/scripts/**/*', ['contat-js']);
 
     gulp.watch('app/src/index.html').on('change', browserSync.reload);
-    // gulp.watch('app/src/scripts/*').on('change', browserSync.reload);
+    gulp.watch('app/src/scripts/*').on('change', browserSync.reload);
     gulp.watch('app/src/styles/*').on('change', browserSync.reload);
     gulp.watch('app/src/fonts/*').on('change', browserSync.reload);
     gulp.watch('app/src/images/*').on('change', browserSync.reload);

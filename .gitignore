@@ -4,3 +4,4 @@ app/dist/
 rev
 rev*
 rev/assets
+rev/assets/*
